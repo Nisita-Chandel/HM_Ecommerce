@@ -1,14 +1,14 @@
 // src/App.jsx
 import React from "react";
-import AppRoutes from "./routes/AppRoutes.jsx";
 import Navbar from "./components/layout/Navbar.jsx";
+import AppRoutes from "./routes/AppRoutes.jsx";
 import Footer from "./components/layout/Footer.jsx";
 
 const App = () => {
   return (
-    <div className="app-root">
+    <div className="min-h-screen flex flex-col bg-white">
       <Navbar />
-      <main className="app-main">
+      <main className="flex-1">
         <AppRoutes />
       </main>
       <Footer />
