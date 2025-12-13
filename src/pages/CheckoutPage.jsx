@@ -29,6 +29,7 @@ const CheckoutPage = () => {
     if (!loaded) {
       alert("Razorpay SDK failed to load");
       return;
+      
     }
 
     const res = await fetch("http://localhost:5000/api/payment/order", {
