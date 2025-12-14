@@ -10,10 +10,12 @@ const favoritesSlice = createSlice({
       const exists = state.items.find(
         (item) => item.id === action.payload.id
       );
+
       if (!exists) {
         state.items.push(action.payload);
       }
     },
+
     removeFromFavorites: (state, action) => {
       state.items = state.items.filter(
         (item) => item.id !== action.payload

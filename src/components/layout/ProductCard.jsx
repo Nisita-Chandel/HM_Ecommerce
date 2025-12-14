@@ -1,59 +1,31 @@
-// src/components/ui/ProductCard.jsx
+// src/components/ProductCard.jsx
 import React from "react";
-import { Link } from "react-router-dom";
-import { formatPrice } from "../../utils/helpers.js";
+import { Heart } from "lucide-react";
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ image, price, onClick, onFav, isFav }) => {
   return (
-    <div
-      style={{
-        border: "1px solid #e5e7eb",
-        borderRadius: "0.75rem",
-        padding: "0.75rem",
-        backgroundColor: "white",
-      }}
-    >
-      <div
-        style={{
-          width: "100%",
-          height: "180px",
-          backgroundColor: "#f3f4f6",
-          borderRadius: "0.5rem",
-          marginBottom: "0.5rem",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          overflow: "hidden",
+    <div className="relative cursor-pointer group" onClick={onClick}>
+      <img
+        src={image}
+        className="w-full aspect-[3/4] object-cover
+                   transition duration-500 group-hover:scale-[1.04]"
+        alt=""
+      />
+
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          onFav();
         }}
+        className="absolute top-2 right-2 bg-white p-1 rounded-full shadow"
       >
-        {product.image ? (
-          <img
-            src={product.image}
-            alt={product.name}
-            style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "cover" }}
-          />
-        ) : (
-          <span style={{ color: "#9ca3af", fontSize: "0.9rem" }}>No Image</span>
-        )}
-      </div>
-      <h3 style={{ fontSize: "1rem", fontWeight: 600, marginBottom: "0.25rem" }}>
-        {product.name}
-      </h3>
-      <p style={{ fontSize: "0.9rem", color: "#6b7280", marginBottom: "0.25rem" }}>
-        {product.brand || product.category}
-      </p>
-      <p style={{ fontWeight: 600, marginBottom: "0.5rem" }}>{formatPrice(product.price)}</p>
-      <Link
-        to={`/products/${product._id}`}
-        style={{
-          fontSize: "0.85rem",
-          padding: "0.35rem 0.75rem",
-          borderRadius: "0.5rem",
-          border: "1px solid #111827",
-        }}
-      >
-        View Details
-      </Link>
+        <Heart
+          size={14}
+          className={isFav ? "text-red-500 fill-red-500" : "text-gray-700"}
+        />
+      </button>
+
+      <p className="mt-2 text-xs sm:text-sm">{price}</p>
     </div>
   );
 };

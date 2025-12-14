@@ -8,14 +8,24 @@ const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
+
     addToCart: (state, action) => {
       const item = action.payload;
-      const existing = state.items.find((i) => i.id === item.id);
+
+      const existing = state.items.find(
+        (i) =>
+          i.id === item.id &&
+          i.selectedSize === item.selectedSize &&
+          i.selectedColor === item.selectedColor
+      );
 
       if (existing) {
-        existing.qty += 1;
+        existing.qty += item.qty || 1;
       } else {
-        state.items.push({ ...item, qty: 1 });
+        state.items.push({
+          ...item,
+          qty: item.qty || 1,   // ✅ SINGLE qty source
+        });
       }
 
       localStorage.setItem("cartItems", JSON.stringify(state.items));
@@ -41,7 +51,7 @@ const cartSlice = createSlice({
     clearCart: (state) => {
       state.items = [];
       localStorage.removeItem("cartItems");
-    }
+    },
   },
 });
 
@@ -50,7 +60,7 @@ export const {
   removeFromCart,
   increaseQty,
   decreaseQty,
-  clearCart
+  clearCart,
 } = cartSlice.actions;
 
 export default cartSlice.reducer;

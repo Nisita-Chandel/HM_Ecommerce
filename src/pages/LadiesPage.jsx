@@ -1,136 +1,169 @@
+// src/pages/LadiesPage.jsx
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { ArrowRight, Heart } from "lucide-react";
 import ladiesProducts from "../data/ladiesProducts.js";
-import { Heart } from "lucide-react";
-import { addToCart } from "../store/cartSlice.js";
-import { addToWishlist } from "../store/wishlistSlice.js";
+import {
+  addToFavorites,
+  removeFromFavorites,
+} from "../store/favoritesSlice.js";
 
 const LadiesPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // Get wishlist items from Redux
-  const wishlistItems = useSelector((state) => state.wishlist.items);
+  const favourites = useSelector((state) => state.favorites.items);
 
-  const isFavourite = (id) => {
-    return wishlistItems.some((item) => item.id === id);
+  const isFavourite = (id) =>
+    favourites.some((item) => item.id === id);
+
+  const toggleFavourite = (product) => {
+    isFavourite(product.id)
+      ? dispatch(removeFromFavorites(product.id))
+      : dispatch(addToFavorites(product));
   };
 
   const formatPrice = (amount) => `₹${amount.toFixed(2)}`;
 
-  const handleAddToCart = (e, product) => {
-    e.stopPropagation();
-    dispatch(addToCart(product));
-  };
-
-  const handleAddToFavourite = (e, product) => {
-    e.stopPropagation();
-    dispatch(addToWishlist(product));
-  };
-
   return (
-    <div className="min-h-screen bg-[#fafafa]">
+    <div className="min-h-screen bg-white">
 
-      {/* BANNER */}
-      <div className="w-full bg-[#f5f5f5]">
-        <div className="max-w-8xl mx-auto px-4 ml-8 mr-8">
-          <img
-            src="https://i.pinimg.com/736x/a2/f2/4f/a2f24f531c2321bc76def9dfe437d848.jpg"
-            alt="Ladies Collection Banner"
-            className="w-full h-[350px] md:h-[450px] lg:h-[550px] object-cover rounded-xl shadow-sm mt-3"
-          />
+      {/* ================= HERO BANNER (NO HOVER) ================= */}
+      <section className="w-full bg-white">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="mt-4 rounded-xl overflow-hidden">
+            <img
+              src="https://i.pinimg.com/1200x/0d/8a/5b/0d8a5b079aa966e9b79768fc0c7219c2.jpg"
+              alt="Ladies Collection"
+              className="w-full h-[340px] md:h-[460px] lg:h-[540px] object-cover"
+            />
+          </div>
+
+          <div className="flex items-center justify-between mt-4 text-xs md:text-sm tracking-wide">
+            <div>
+              <h2 className="font-semibold uppercase">
+                WOMEN’S NEW SEASON
+              </h2>
+              <p className="text-gray-500 mt-1 uppercase">
+                Fresh styles & elegant fits
+              </p>
+            </div>
+
+            <button className="inline-flex items-center gap-1 uppercase hover:underline">
+              <span>Explore</span>
+              <ArrowRight size={16} />
+            </button>
+          </div>
         </div>
-      </div>
+      </section>
 
-      {/* CONTENT */}
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        
-        <h1 className="text-3xl font-semibold mb-3">Ladies Collection</h1>
-        <p className="text-gray-500 mt-2 max-w-xl text-[15px]">
-          Explore our latest dresses with premium styles and comfort.
-        </p>
+      {/* ================= FEATURE IMAGES (HOVER ADDED) ================= */}
+      <section className="mt-10">
+        <div className="max-w-6xl mx-auto px-4 grid md:grid-cols-2 gap-4">
 
-        {/* PRODUCT GRID */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mt-5">
-          {ladiesProducts.map((product) => {
-            
-            const fav = isFavourite(product.id); // Check wishlist
-            
-            return (
+          {/* LEFT FEATURE */}
+          <div
+            className="relative rounded-xl overflow-hidden cursor-pointer group"
+            onClick={() => navigate(`/product/${ladiesProducts[0].id}`)}
+          >
+            <img
+              src={ladiesProducts[0].image}
+              className="w-full h-[260px] md:h-[360px] object-cover transition-transform duration-500 group-hover:scale-105"
+              alt={ladiesProducts[0].name}
+            />
+            <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition" />
+            <div className="absolute bottom-4 left-4 text-white text-sm">
+              <p className="uppercase font-semibold">Trending Dresses</p>
+              <p className="text-gray-200 mt-1">Elegant silhouettes</p>
+            </div>
+          </div>
+
+          {/* RIGHT FEATURE */}
+          <div
+            className="relative rounded-xl overflow-hidden cursor-pointer group"
+            onClick={() => navigate(`/product/${ladiesProducts[1].id}`)}
+          >
+            <img
+              src={ladiesProducts[1].image}
+              className="w-full h-[260px] md:h-[360px] object-cover transition-transform duration-500 group-hover:scale-105"
+              alt={ladiesProducts[1].name}
+            />
+            <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition" />
+            <div className="absolute bottom-4 left-4 text-white text-sm">
+              <p className="uppercase font-semibold">Party Wear</p>
+              <p className="text-gray-200 mt-1">Made to stand out</p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* ================= NEW IN (HOVER ADDED) ================= */}
+      <section className="mt-12">
+        <div className="max-w-6xl mx-auto px-4">
+          <h2 className="text-xl font-semibold mb-4 uppercase">New in</h2>
+
+          <div className="grid grid-cols-3 md:grid-cols-5 gap-4">
+            {ladiesProducts.slice(0, 5).map((product) => (
               <div
                 key={product.id}
-                className="group rounded-lg overflow-hidden cursor-pointer"
+                className="relative cursor-pointer group"
+                onClick={() => navigate(`/product/${product.id}`)}
               >
-                {/* IMAGE */}
-                <div
-                  className="relative w-full h-72 md:h-80 overflow-hidden"
-                  onClick={() => navigate(`/product/${product.id}`)}
-                  >
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="w-full h-full object-cover transform group-hover:scale-105 transition duration-300"
+                <img
+                  src={product.image}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  alt={product.name}
+                />
+
+                {/* subtle overlay */}
+                <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition" />
+
+                {/* ❤️ FAVORITE */}
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleFavourite(product);
+                  }}
+                  className="absolute top-2 right-2 bg-white p-1 rounded-full shadow opacity-0 group-hover:opacity-100 transition"
+                >
+                  <Heart
+                    size={14}
+                    className={
+                      isFavourite(product.id)
+                        ? "text-red-500 fill-red-500"
+                        : "text-gray-700"
+                    }
                   />
+                </button>
 
-                  {/* OVERLAY */}
-                  <div className="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/85 via-black/30 to-transparent">
-                    
-                    {/* NAME + PRICE + HEART */}
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <h3 className="text-white text-sm font-medium truncate">
-                          {product.name}
-                        </h3>
-                        <p className="text-white text-xs opacity-90">
-                          {formatPrice(product.price)}
-                        </p>
-                      </div>
-
-                      {/* HEART ICON — stays red if favourited */}
-                      <button
-                        onClick={(e) => handleAddToFavourite(e, product)}
-                        className="p-1 rounded-full bg-white/90 hover:bg-white transition"
-                      >
-                        <Heart
-                          size={18}
-                          className={
-                            fav
-                              ? "text-red-500 fill-red-500"
-                              : "text-gray-700 hover:text-red-500"
-                          }
-                        />
-                      </button>
-                    </div>
-
-                    {/* ADD TO CART */}
-                    <button
-                      onClick={(e) => handleAddToCart(e, product)}
-                      className="mt-2 w-full py-1.5 text-xs md:text-sm bg-white text-gray-900 rounded-md font-medium hover:bg-gray-900 hover:text-white transition"
-                    >
-                      Add to Cart
-                    </button>
-
-                  </div>
-                </div>
-
+                <p className="mt-2 text-sm">
+                  {formatPrice(product.price)}
+                </p>
               </div>
-            );
-          })}
+            ))}
+          </div>
         </div>
+      </section>
 
-      </div>
-      <section className="mt-12 mb-10">
-        <div className="max-w-7xl mx-auto px-4">
-          <h2 className="uppercase text-[19px] font-semibold mb-2">Women's Clothing</h2>
-          <p className="text-sm md:text-[14px] leading-relaxed ">
-          Refresh your daily rotation with our women’s clothing range. With the freshest styles available all in one place, you can expect everyday basics, like women's tops and skirts, as well as must-have knitwear and cozy loungewear for downtime days. Plans to go out? Our women's dresses line up mini, midi and maxi styles that were made for summer evenings, while our stylish jeans and pants offer something to flatter every silhouette. Solve your wardrobe woes on busy days with cool co-ords, and wrap up to stay warm in our women's jackets and coats when extra layers are required. Finish off your favorite new looks with an array of trendy accessories, and don’t forget to scroll for statement footwear in our women's shoes range. Discover more women’s fashion by scrolling our Conscious collection, which has been crafted with the planet in mind – think sustainably sourced materials, including organic cotton and recycled polyester.
+      {/* ================= DESCRIPTION ================= */}
+      <section className="mt-14 mb-16">
+        <div className="max-w-6xl mx-auto px-4">
+          <h2 className="uppercase text-lg font-semibold mb-2">
+            WOMEN’S CLOTHING
+          </h2>
+          <p className="text-sm leading-relaxed text-gray-700">
+            Refresh your daily rotation with our women’s clothing range.
+            From everyday essentials to elegant dresses, cozy knitwear,
+            stylish denim and statement outerwear — discover fashion
+            designed for confidence and comfort.
           </p>
         </div>
       </section>
+
     </div>
   );
 };
 
 export default LadiesPage;
-
