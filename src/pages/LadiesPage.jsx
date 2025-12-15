@@ -9,9 +9,12 @@ import {
   removeFromFavorites,
 } from "../store/favoritesSlice.js";
 
+
 const LadiesPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  
+
 
   const favourites = useSelector((state) => state.favorites.items);
 

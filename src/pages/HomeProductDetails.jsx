@@ -1,12 +1,20 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import { Star } from "lucide-react";
+import { Star, Heart } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
 import homeProducts from "../data/homeProducts";
+import { addToCart } from "../store/cartSlice";
+import {
+  addToFavorites,
+  removeFromFavorites,
+} from "../store/favoritesSlice";
 
 const HomeProductDetails = () => {
   const { id } = useParams();
+  const dispatch = useDispatch();
 
   const product = homeProducts.find((p) => p.id === id);
+  const favourites = useSelector((state) => state.favorites.items);
 
   if (!product) {
     return (
@@ -15,6 +23,16 @@ const HomeProductDetails = () => {
       </div>
     );
   }
+
+  const isFavourite = favourites.some((item) => item.id === product.id);
+
+  const cartPayload = {
+    id: product.id,
+    name: product.name,
+    image: product.image,
+    price: product.price,
+    qty: 1,
+  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -32,7 +50,7 @@ const HomeProductDetails = () => {
           <h1 className="text-3xl font-semibold mb-2">{product.name}</h1>
 
           {/* RATING */}
-          <div className="flex items-center gap-1 mb-3">
+          <div className="flex items-center gap-1 mb-4">
             {[...Array(5)].map((_, i) => (
               <Star
                 key={i}
@@ -55,9 +73,32 @@ const HomeProductDetails = () => {
             ₹{product.price}
           </p>
 
-          <button className="bg-black text-white px-8 py-3 rounded hover:bg-gray-800 transition">
-            Add to Cart
-          </button>
+          {/* ACTIONS */}
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => dispatch(addToCart(cartPayload))}
+              className="bg-black text-white px-8 py-3 rounded hover:bg-gray-800 transition"
+            >
+              Add to Cart
+            </button>
+
+            <button
+              onClick={() =>
+                isFavourite
+                  ? dispatch(removeFromFavorites(product.id))
+                  : dispatch(addToFavorites(product))
+              }
+              className="w-12 h-12 border rounded-full flex items-center justify-center"
+            >
+              <Heart
+                className={
+                  isFavourite
+                    ? "fill-red-500 text-red-500"
+                    : "text-gray-600"
+                }
+              />
+            </button>
+          </div>
         </div>
       </div>
     </div>

@@ -4,6 +4,8 @@ import { Routes, Route } from "react-router-dom";
 import HomeLayout from "../components/layout/HomeLayout.jsx";
 
 import HomePage from "../pages/HomePage.jsx";
+import HomeProductDetails from "../pages/HomeProductDetails.jsx";
+
 import CartPage from "../pages/CartPage.jsx";
 import CheckoutPage from "../pages/CheckoutPage.jsx";
 import SearchPage from "../pages/SearchPage.jsx";
@@ -18,7 +20,7 @@ import BeautyPage from "../pages/BeautyPage.jsx";
 import LoginPage from "../pages/LoginPage.jsx";
 import SignupPage from "../pages/SignupPage.jsx";
 import GoogleSuccess from "../pages/GoogleSuccess.jsx";
-import HomeProductDetails from "../pages/HomeProductDetails.jsx";
+import MenProductDetails from "../pages/MenProductDetails.jsx";
 
 
 const AppRoutes = () => {
@@ -28,7 +30,8 @@ const AppRoutes = () => {
       {/* PAGES WITH NAVBAR */}
       <Route element={<HomeLayout />}>
         <Route path="/" element={<HomePage />} />
-        <Route path="/product/:id" element={<HomeProductDetails />} />
+        <Route path="/home/:id" element={<HomeProductDetails />} />
+
 
 
         {/* ✅ FIXED ROUTE */}
@@ -40,6 +43,10 @@ const AppRoutes = () => {
         <Route path="/favorite" element={<FavoritePage />} />
         <Route path="/ladies" element={<LadiesPage />} />
         <Route path="/men" element={<MenPage />} />
+
+        <Route path="/product-details" element={<MenProductDetails />} />
+
+
         <Route path="/kids" element={<KidsPage />} />
         <Route path="/kids/:id" element={<KidsProductDetails />} />
         <Route path="/beauty" element={<BeautyPage />} />
