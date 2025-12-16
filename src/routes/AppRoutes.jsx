@@ -21,6 +21,7 @@ import LoginPage from "../pages/LoginPage.jsx";
 import SignupPage from "../pages/SignupPage.jsx";
 import GoogleSuccess from "../pages/GoogleSuccess.jsx";
 import MenProductDetails from "../pages/MenProductDetails.jsx";
+import BeautyProductDetails from "../pages/BeautyProductDetails.jsx";
 
 
 const AppRoutes = () => {
@@ -44,12 +45,19 @@ const AppRoutes = () => {
         <Route path="/ladies" element={<LadiesPage />} />
         <Route path="/men" element={<MenPage />} />
 
-        <Route path="/product-details" element={<MenProductDetails />} />
+        <Route path="/men/:id" element={<MenProductDetails />} />
 
 
         <Route path="/kids" element={<KidsPage />} />
-        <Route path="/kids/:id" element={<KidsProductDetails />} />
+        <Route path="/kids-product-details" element={<KidsProductDetails />} />
+
         <Route path="/beauty" element={<BeautyPage />} />
+
+        <Route
+  path="/beauty-product-details"
+  element={<BeautyProductDetails />}
+/>
+
         <Route path="/google-success" element={<GoogleSuccess />} />
       </Route>
 

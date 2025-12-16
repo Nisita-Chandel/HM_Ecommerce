@@ -25,10 +25,10 @@ const FavoritePage = () => {
         {favourites.map((item) => (
           <div key={item.id} className="relative border p-3">
 
-            {/* ✅ IMAGE FIX */}
+            {/* ✅ FIXED IMAGE */}
             <img
-              src={item.image}
-              alt={item.name}
+              src={item.img}
+              alt={item.title}
               className="w-full h-72 object-cover"
             />
 
@@ -40,8 +40,11 @@ const FavoritePage = () => {
               <Heart className="text-red-500 fill-red-500" size={16} />
             </button>
 
-            <p className="mt-2 text-sm">{item.name}</p>
-            <p className="text-sm font-medium">₹{item.price}</p>
+            {/* ✅ FIXED TITLE */}
+            <p className="mt-2 text-sm">{item.title}</p>
+
+            {/* PRICE */}
+            <p className="text-sm font-medium">{item.price}</p>
           </div>
         ))}
       </div>

@@ -1,5 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import {
   increaseQty,
   decreaseQty,
@@ -8,6 +9,7 @@ import {
 
 const CartPage = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const cartItems = useSelector((state) => state.cart.items);
 
   const total = cartItems.reduce(
@@ -25,7 +27,6 @@ const CartPage = () => {
           className="flex items-center justify-between border p-4 mb-4"
         >
           <div className="flex items-center gap-4">
-            {/* ✅ IMAGE */}
             <img
               src={item.image}
               alt={item.name}
@@ -39,7 +40,6 @@ const CartPage = () => {
               </p>
               <p className="font-medium">₹{item.price}</p>
 
-              {/* QUANTITY CONTROLS */}
               <div className="flex items-center gap-2 mt-2">
                 <button
                   onClick={() => dispatch(decreaseQty(item.id))}
@@ -70,7 +70,10 @@ const CartPage = () => {
 
       <div className="flex justify-between items-center mt-6">
         <p className="text-lg font-semibold">Total: ₹{total}</p>
-        <button className="bg-black text-white px-6 py-2 rounded">
+        <button
+          onClick={() => navigate("/checkout")}
+          className="bg-black text-white px-6 py-2 rounded cursor-pointer hover:bg-gray-800"
+        >
           Checkout
         </button>
       </div>

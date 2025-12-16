@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import { signupApi } from "../api/authApi";
 import { loginUser } from "../utils/auth";
+import { toast } from "react-toastify";
 
 const SignupPage = () => {
   const navigate = useNavigate();
@@ -17,17 +18,15 @@ const SignupPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSignup = async (e) => {
     e.preventDefault();
-    setError("");
 
     if (form.password !== form.confirmPassword) {
-      setError("Passwords do not match");
+      toast.error("Passwords do not match ❌");
       return;
     }
 
@@ -38,10 +37,12 @@ const SignupPage = () => {
         email: form.email,
         password: form.password,
       });
+
+      toast.success("Account created successfully 🎉");
       loginUser(data);
       navigate("/");
-    } catch {
-      setError("Signup failed. Try again.");
+    } catch (err) {
+      toast.error("Signup failed. Try again ❌");
     } finally {
       setLoading(false);
     }
@@ -59,17 +60,9 @@ const SignupPage = () => {
           Join us to start shopping
         </p>
 
-        {/* ERROR */}
-        {error && (
-          <div className="mb-4 text-sm text-red-600 text-center">
-            {error}
-          </div>
-        )}
-
         {/* FORM */}
         <form onSubmit={handleSignup} className="space-y-4">
 
-          {/* FULL NAME */}
           <input
             type="text"
             name="name"
@@ -81,7 +74,6 @@ const SignupPage = () => {
                        focus:outline-none focus:ring-2 focus:ring-black"
           />
 
-          {/* EMAIL */}
           <input
             type="email"
             name="email"

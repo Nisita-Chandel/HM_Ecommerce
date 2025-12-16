@@ -10,12 +10,26 @@ const MenProductDetails = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const product = menProducts.find((p) => p.id === id);
+  // 🔒 SAFE FIND (important fix)
+  const product = menProducts?.find(
+    (p) => String(p.id) === String(id)
+  );
 
+  // 🔍 Debug (keep for now)
+  console.log("URL ID:", id);
+  console.log("Matched Product:", product);
+
+  // ❌ If product still not found
   if (!product) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        Product not found
+      <div className="min-h-screen flex flex-col items-center justify-center gap-4">
+        <p className="text-lg font-semibold">Product not found</p>
+        <button
+          onClick={() => navigate("/men")}
+          className="border px-6 py-2 rounded"
+        >
+          Go back
+        </button>
       </div>
     );
   }

@@ -4,6 +4,8 @@ import { ArrowRight, Heart } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { addToFavorites, removeFromFavorites } from "../store/favoritesSlice";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+
 
 const MenPage = () => {
   const dispatch = useDispatch();
@@ -58,18 +60,8 @@ const MenPage = () => {
           {/* LEFT FEATURE */}
           <div
             className="relative rounded-xl overflow-hidden group cursor-pointer"
-            onClick={() =>
-              navigate("/product-details", {
-                state: {
-                  id: "men-knitwear",
-                  img: "https://i.pinimg.com/1200x/ab/6e/89/ab6e8923ddce0e79593b1c7c542b6fa5.jpg",
-                  title: "Men Knitwear",
-                  price: "Rs. 2,999",
-                  description: "Warm knitted essentials for winter.",
-                  rating: 4.6,
-                },
-              })
-            }
+            onClick={() => navigate("/men/men-knitwear")}
+
           >
             <img
               src="https://i.pinimg.com/1200x/ab/6e/89/ab6e8923ddce0e79593b1c7c542b6fa5.jpg"
@@ -110,18 +102,8 @@ const MenPage = () => {
           {/* RIGHT FEATURE */}
           <div
             className="relative rounded-xl overflow-hidden group cursor-pointer"
-            onClick={() =>
-              navigate("/product-details", {
-                state: {
-                  id: "men-jacket",
-                  img: "https://i.pinimg.com/1200x/96/7e/86/967e86ba0bf93a9a6b807f58e8056195.jpg",
-                  title: "Men Jacket",
-                  price: "Rs. 3,499",
-                  description: "Stylish jacket for cold weather.",
-                  rating: 4.7,
-                },
-              })
-            }
+            onClick={() => navigate("/men/men-jacket")}
+
           >
             <img
               src="https://i.pinimg.com/1200x/96/7e/86/967e86ba0bf93a9a6b807f58e8056195.jpg"
@@ -190,43 +172,42 @@ const MenPage = () => {
                 img: "https://i.pinimg.com/1200x/f5/89/83/f58983d57ee328999761ac3ab746235b.jpg",
               },
             ].map((item) => (
-              <div key={item.id} className="relative group cursor-pointer">
-                <img
-                  src={item.img}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  onClick={() =>
-                    navigate("/product-details", {
-                      state: {
-                        id: item.id,
-                        img: item.img,
-                        title: "Men New Arrival",
-                        price: "Rs. 2,499",
-                      },
-                    })
-                  }
-                />
+              <div
+  key={item.id}
+  className="relative group cursor-pointer"
+  onClick={() => navigate(`/men/${item.id}`)}
+>
+  {/* IMAGE */}
+  <img
+    src={item.img}
+    alt=""
+    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+  />
 
-                <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition" />
+  {/* OVERLAY (disable pointer events) */}
+  <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition pointer-events-none" />
 
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    toggleFavourite(item);
-                  }}
-                  className="absolute top-2 right-2 bg-white p-1 rounded-full shadow opacity-0 group-hover:opacity-100 transition"
-                >
-                  <Heart
-                    size={14}
-                    className={
-                      isFavourite(item.id)
-                        ? "text-red-500 fill-red-500"
-                        : "text-gray-700"
-                    }
-                  />
-                </button>
+  {/* FAVOURITE BUTTON */}
+  <button
+    onClick={(e) => {
+      e.stopPropagation(); // stop navigation ONLY for heart
+      toggleFavourite(item);
+    }}
+    className="absolute top-2 right-2 bg-white p-1 rounded-full shadow opacity-0 group-hover:opacity-100 transition z-10"
+  >
+    <Heart
+      size={14}
+      className={
+        isFavourite(item.id)
+          ? "text-red-500 fill-red-500"
+          : "text-gray-700"
+      }
+    />
+  </button>
 
-                <p className="mt-2 text-sm">Rs. 2,499.00</p>
-              </div>
+  <p className="mt-2 text-sm">Rs. 2,499.00</p>
+</div>
+
             ))}
           </div>
         </div>

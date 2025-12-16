@@ -1,14 +1,12 @@
+
 export const loginUser = (data) => {
-    localStorage.setItem("token", data.token);
-    localStorage.setItem("user", JSON.stringify(data.user));
-  };
-  
-  export const logoutUser = () => {
-    localStorage.clear();
-  };
-  
-  export const isLoggedIn = () => !!localStorage.getItem("token");
-  
-  export const getUser = () =>
-    JSON.parse(localStorage.getItem("user"));
-  
+  if (!data || !data.token) {
+    console.warn("No token received");
+    return;
+  }
+  localStorage.setItem("token", data.token);
+};
+
+export const logoutUser = () => {
+  localStorage.removeItem("token");
+};

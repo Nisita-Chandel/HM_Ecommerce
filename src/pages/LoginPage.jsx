@@ -1,32 +1,32 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { loginUser } from "../utils/auth";
 import { Eye, EyeOff } from "lucide-react";
+import { toast } from "react-toastify";
+import { loginUser } from "../utils/auth";
+import { loginApi } from "../api/authApi";
 
 const LoginPage = () => {
   const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setMessage("");
 
-    // simulate backend call
-    setTimeout(() => {
-      loginUser();
-      setLoading(false);
-      setMessage("Login successful ✅");
+    try {
+      const data = await loginApi({ email, password });
+      loginUser(data);
+      toast.success("Login successful ✅");
       navigate("/");
-    }, 1200);
-  };
-
-  const handleGoogleLogin = () => {
-    if (loading) return;
-    window.location.href = "http://localhost:5000/auth/google";
+    } catch (err) {
+      toast.error("Invalid email or password ❌");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -41,31 +41,28 @@ const LoginPage = () => {
           Sign in to continue shopping
         </p>
 
-        {/* MESSAGE */}
-        {message && (
-          <div className="mb-4 text-sm text-green-600 text-center">
-            {message}
-          </div>
-        )}
-
         {/* FORM */}
         <form onSubmit={handleLogin} className="space-y-4">
           <input
             type="email"
             placeholder="Email address"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
             className="w-full border border-gray-300 px-4 py-2.5 rounded-lg text-sm
                        focus:outline-none focus:ring-2 focus:ring-black"
-            required
           />
 
-          {/* PASSWORD WITH TOGGLE */}
+          {/* PASSWORD */}
           <div className="relative">
             <input
               type={showPassword ? "text" : "password"}
               placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
               className="w-full border border-gray-300 px-4 py-2.5 rounded-lg text-sm
                          focus:outline-none focus:ring-2 focus:ring-black"
-              required
             />
             <button
               type="button"
@@ -74,16 +71,6 @@ const LoginPage = () => {
             >
               {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
             </button>
-          </div>
-
-          {/* FORGOT PASSWORD */}
-          <div className="text-right">
-            <Link
-              to="/forgot-password"
-              className="text-xs text-gray-600 hover:underline"
-            >
-              Forgot password?
-            </Link>
           </div>
 
           {/* LOGIN BUTTON */}
@@ -97,34 +84,9 @@ const LoginPage = () => {
                   : "bg-black text-white hover:bg-gray-900"
               }`}
           >
-            {loading && (
-              <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-            )}
             {loading ? "Signing in..." : "Sign in"}
           </button>
         </form>
-
-        {/* DIVIDER */}
-        <div className="flex items-center gap-3 my-6">
-          <div className="flex-1 h-px bg-gray-300" />
-          <span className="text-xs text-gray-500">OR</span>
-          <div className="flex-1 h-px bg-gray-300" />
-        </div>
-
-        {/* GOOGLE LOGIN */}
-        <button
-          onClick={handleGoogleLogin}
-          disabled={loading}
-          className="w-full border border-gray-300 py-2.5 rounded-lg flex items-center justify-center gap-3 text-sm
-                     hover:bg-gray-50 transition disabled:opacity-60"
-        >
-          <img
-            src="https://developers.google.com/identity/images/g-logo.png"
-            alt="Google"
-            className="w-4 h-4"
-          />
-          Continue with Google
-        </button>
 
         {/* SIGN UP */}
         <p className="text-sm text-center text-gray-600 mt-6">
@@ -133,6 +95,7 @@ const LoginPage = () => {
             Sign up
           </Link>
         </p>
+
       </div>
     </div>
   );
